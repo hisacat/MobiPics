@@ -140,7 +140,8 @@ class TrayApp:
         icon.update_menu()
 
     def on_open_folder(self):
-        """스크린샷 폴더 열기"""
+        """스크린샷 폴더 열기 (더블클릭 시에도 동작)"""
+        print("[TrayApp] 스크린샷 폴더 열기")
         open_folder(self.config.screenshot_path)
 
     def on_change_folder(self):
@@ -295,7 +296,7 @@ class TrayApp:
             pystray.Menu.SEPARATOR,
             item("시스템 시작 시 자동 실행", self.on_auto_start_toggle, checked=lambda item: is_in_startup()),
             pystray.Menu.SEPARATOR,
-            item("스크린샷 폴더 열기", lambda: self.on_open_folder()),
+            item("스크린샷 폴더 열기", lambda: self.on_open_folder(), default=True),  # 더블클릭 기본 동작
             item("스크린샷 대상 폴더 변경", lambda: self.on_change_folder()),
             item("스크린샷 대상 폴더 기본값으로 되돌리기", lambda: self.on_reset_folder()),
             pystray.Menu.SEPARATOR,
