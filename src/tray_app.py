@@ -41,6 +41,14 @@ class TrayApp:
         # 마커 파일 생성
         self.create_marker_file(self.config.screenshot_path)
 
+        # 최초 실행 시 시작 프로그램 자동 등록 (exe 모드만)
+        if self.config.first_run and getattr(sys, "frozen", False):
+            print("[TrayApp] 최초 실행 감지 - 시작 프로그램 자동 등록 시도")
+            if add_to_startup():
+                self.config.auto_start = True
+                print("[TrayApp] 시작 프로그램 자동 등록 완료")
+            self.config.first_run = False
+
         # 백그라운드에서 업데이트 확인 (프로그램 시작 지연 방지)
         threading.Thread(target=self._check_updates_on_startup, daemon=True).start()
 
@@ -130,14 +138,10 @@ class TrayApp:
             root = Tk()
             root.withdraw()
             root.attributes("-topmost", True)
-            messagebox.showwarning(
-                "MobiPics",
-                "시작 프로그램 등록은 배포용 exe에서만 가능합니다.\n\n"
-                "build.bat를 실행하여 exe를 빌드한 후 사용하세요."
-            )
+            messagebox.showwarning("MobiPics", "시작 프로그램 등록은 배포용 exe에서만 가능합니다.\n\n" "build.bat를 실행하여 exe를 빌드한 후 사용하세요.")
             root.destroy()
             return
-        
+
         current = is_in_startup()
 
         if current:
