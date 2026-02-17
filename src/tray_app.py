@@ -125,6 +125,19 @@ class TrayApp:
 
     def on_auto_start_toggle(self, icon, item):
         """자동 시작 토글"""
+        # 개발 모드 체크
+        if not getattr(sys, "frozen", False):
+            root = Tk()
+            root.withdraw()
+            root.attributes("-topmost", True)
+            messagebox.showwarning(
+                "MobiPics",
+                "시작 프로그램 등록은 배포용 exe에서만 가능합니다.\n\n"
+                "build.bat를 실행하여 exe를 빌드한 후 사용하세요."
+            )
+            root.destroy()
+            return
+        
         current = is_in_startup()
 
         if current:

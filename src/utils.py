@@ -17,13 +17,19 @@ def get_exe_path() -> str:
 
 
 def add_to_startup(app_name: str = "MobiPics") -> bool:
-    """시작 프로그램에 등록"""
+    """시작 프로그램에 등록 (exe 모드에서만 가능)"""
+    # 개발 모드에서는 등록 불가
+    if not getattr(sys, "frozen", False):
+        print("시작 프로그램 등록 실패: 개발 모드에서는 지원하지 않습니다. exe 빌드 후 사용하세요.")
+        return False
+
     try:
         exe_path = get_exe_path()
         key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
 
         with winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE) as key:
             winreg.SetValueEx(key, app_name, 0, winreg.REG_SZ, exe_path)
+        print(f"시작 프로그램 등록 완료: {exe_path}")
         return True
     except Exception as e:
         print(f"시작 프로그램 등록 실패: {e}")
