@@ -1,7 +1,6 @@
 @echo off
-chcp 65001 >nul
 
-REM Python 빌드 스크립트 실행
+REM Run the build script
 python build.py
 
 pause
