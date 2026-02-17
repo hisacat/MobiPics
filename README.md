@@ -1,4 +1,4 @@
-# MobiPics - 모비노기 스크린샷 자동 정리
+# MobiPics - 모비픽
 
 ![icon](./images/icon_256px.png)
 
